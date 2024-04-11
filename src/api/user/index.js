@@ -51,15 +51,15 @@ export const getButtons = () =>
 
 export const logout = () =>
   request({
-    url: '/api/spang-auth/oauth/logout',
+    url: '/spang-auth/oauth/logout',
     method: 'get'
   })
 
 export const getUserInfo = () =>
   request({
-    url: '/spang-auth/oauth/user-info',
-    method: 'get'
-  })
+    url: '/spang-system/info',
+    method: 'get',
+  });
 
 
 

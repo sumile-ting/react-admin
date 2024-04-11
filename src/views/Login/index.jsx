@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import Slider from './components/Slider';
 import { loginBySlider } from '@/api/user';
 import { setUserToken } from '@/store/modules/user';
-import './index.scss';
+import styles from './index.module.scss';
 const Login = () => {
   const [showSlider, setShowSlider] = useState(false);
 
@@ -53,9 +53,9 @@ const Login = () => {
     });
   };
   return (
-    <div className="login-container">
+    <div className={styles.loginContainer}>
       <Spin spinning={loading}>
-        <div className="login-box">
+        <div className={styles.loginBox}>
           <Form
             name="basic"
             labelCol={{ span: 8 }}
@@ -84,7 +84,7 @@ const Login = () => {
             </Form.Item>
           </Form>
           {showSlider && (
-            <div className="slider-container">
+            <div className={styles.sliderContainer}>
               <Slider onValid={handleLogin} />
             </div>
           )}

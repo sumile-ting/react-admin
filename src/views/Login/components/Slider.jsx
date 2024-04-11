@@ -29,7 +29,6 @@ const Slider = ({ onValid }) => {
       }
     }
     if (reload) {
-      console.log('--->getCode----');
       getImg();
     }
 
@@ -37,8 +36,6 @@ const Slider = ({ onValid }) => {
       ignore = true;
     };
   }, [reload]);
-
-  console.log('--->子组件渲染----');
 
   useEffect(() => {
     // 鼠标开始移动
@@ -68,7 +65,6 @@ const Slider = ({ onValid }) => {
         setMovePercent(0);
       }
     }
-    console.log('--->子组件渲染1');
     if (isStartMove) {
       window.addEventListener('mousemove', onMove);
       window.addEventListener('mouseup', onStop);

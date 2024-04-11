@@ -2,7 +2,7 @@ import {
     validatenull
 } from '@/utils/validate';
 
-const keyName = app + '-';
+const keyName = 'react-app-';
 /**
  * 存储localStorage
  */

@@ -1,0 +1,29 @@
+.top-header {
+  height: var(--top-header-height);
+  line-height: var(--top-header-height);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background-color: var(--primary-color);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--margin);
+  &>div:nth-child(2) {
+    font-size: 12px;
+    color: #fff;
+  }
+  .dropdown-a:hover {
+    color: #fff;
+  }
+}
+.aside {
+  width: 240px; 
+  margin: var(--margin) 0;
+  padding: var(--margin);
+  background-color: #fff;
+  border-radius: var(--card-border-radius);
+  box-shadow: var(--card-box-shadow);
+}

@@ -6,8 +6,13 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url))
-    }
+      '@': fileURLToPath(new URL('./src', import.meta.url)),
+    },
+  },
+  css: {
+    modules: {
+      localsConvention: 'camelCaseOnly',
+    },
   },
   server: {
     host: '0.0.0.0',
@@ -20,7 +25,7 @@ export default defineConfig({
         // target: 'http://101.201.117.246',
         target: 'http://172.17.30.201',
         // rewrite: (path) => path.replace(/^\/api/, '/')
-      }
-    }
-  }
-})
+      },
+    },
+  },
+});
