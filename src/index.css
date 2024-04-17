@@ -1,12 +1,9 @@
+@import url('@/styles/variables.scss');
+@import url('@/styles/antd.reset.scss');
 :root {
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
   background-color: #242424;
-  --primary-color: #5682dc;
-  --card-box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
-  --card-border-radius: 10px;
-  --top-header-height: 48px;
-  --margin: 15px;
 }
 
 
@@ -28,4 +25,10 @@ html, body, #root {
   button {
     background-color: #f9f9f9;
   }
+}
+
+.page-layout {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }

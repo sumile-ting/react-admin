@@ -1,7 +1,6 @@
 import { useEffect } from 'react';
 import { DownOutlined } from '@ant-design/icons';
-import { Dropdown, ConfigProvider, Modal, Space } from 'antd';
-import zhCN from 'antd/locale/zh_CN';
+import { Dropdown, Modal, Space } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 // import { useNavigate } from 'react-router-dom';
 import { loadUserInfo } from '@/store/modules/user';
@@ -57,7 +56,7 @@ export default function Top() {
           </a>
         </Dropdown>
       </div>
-      <ConfigProvider locale={zhCN}>{contextHolder}</ConfigProvider>
+      {contextHolder}
     </header>
   );
 }

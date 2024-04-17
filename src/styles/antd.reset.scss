@@ -1,0 +1,5 @@
+@import url('./variables.scss');
+.ant-card {
+  border-radius: var(--card-border-radius);
+  box-shadow: var(--card-box-shadow) !important; 
+}
