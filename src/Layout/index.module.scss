@@ -1,16 +1,11 @@
 .main-container {
   position: relative;
-  top: 48px;
+  top: var(--top-header-height);
   display: flex;
-  gap: 15px;
-  padding: 0 15px;
   height: calc(100% - var(--top-header-height));
 }
 .main-section {
-  flex: 1;
-  margin: var(--margin) 0;
-  // padding: var(--margin);
-  // background-color: #fff;
-  // border-radius: var(--card-border-radius);
-  // box-shadow: var(--card-box-shadow);
+  flex-grow: 1;
+  width: 100%;
+  overflow: hidden;
 }

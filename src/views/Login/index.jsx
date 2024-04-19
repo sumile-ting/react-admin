@@ -1,17 +1,17 @@
-import { Button, Spin, Form, Input, message } from 'antd';
-import { useRef, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import Slider from './components/Slider';
-import { loginBySlider } from '@/api/user';
-import { setUserToken } from '@/store/modules/user';
-import styles from './index.module.scss';
+import { Button, Spin, Form, Input, message } from "antd";
+import { useRef, useState } from "react";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import Slider from "./components/Slider";
+import { loginBySlider } from "@/api/user";
+import { setUserToken } from "@/store/modules/user";
+import styles from "./index.module.scss";
 const Login = () => {
   const [showSlider, setShowSlider] = useState(false);
 
   const formData = useRef({
-    username: '',
-    password: '',
+    username: "",
+    password: ""
   });
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
@@ -30,8 +30,8 @@ const Login = () => {
       const params = {
         code: movePercent.toFixed(6),
         key: uuid,
-        tenantId: '000000',
-        ...formData.current,
+        tenantId: "000000",
+        ...formData.current
       };
       loginBySlider(params)
         .then(
@@ -39,13 +39,13 @@ const Login = () => {
             resolve(status);
             dispatch(setUserToken(data.access_token));
             setTimeout(() => {
-              navigate('/desk/notice');
+              navigate("/desk/notice");
             });
           },
           ({ status, data }) => {
             resolve(status);
             message.error(data);
-          },
+          }
         )
         .finally(() => {
           setLoading(false);
@@ -66,14 +66,14 @@ const Login = () => {
             <Form.Item
               label="用户名"
               name="username"
-              rules={[{ required: true, message: '请输入用户名!' }]}
+              rules={[{ required: true, message: "请输入用户名!" }]}
             >
               <Input />
             </Form.Item>
             <Form.Item
               label="密码"
               name="password"
-              rules={[{ required: true, message: '请输入密码!' }]}
+              rules={[{ required: true, message: "请输入密码!" }]}
             >
               <Input.Password />
             </Form.Item>
@@ -85,7 +85,7 @@ const Login = () => {
           </Form>
           {showSlider && (
             <div className={styles.sliderContainer}>
-              <Slider onValid={handleLogin} />
+              <Slider onValid={handleLogin} onClose={() => setShowSlider(false)} />
             </div>
           )}
         </div>

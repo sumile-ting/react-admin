@@ -22,7 +22,8 @@
 }
 .aside {
   width: 240px; 
-  margin: var(--margin) 0;
+  flex-shrink: 0;
+  margin: var(--margin) 7px var(--margin) var(--margin);
   padding: var(--margin);
   background-color: #fff;
   border-radius: var(--card-border-radius);

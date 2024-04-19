@@ -1,11 +1,13 @@
-import { useEffect, useState } from 'react';
-import { getSliderImg } from '@/api/user';
-import './slider.css';
-const Slider = ({ onValid }) => {
+import { useEffect, useState } from "react";
+import { getSliderImg } from "@/api/user";
+import refreshIcon from "@/assets/icon/refresh.svg";
+import closeIcon from "@/assets/icon/close.svg";
+import "./slider.css";
+const Slider = ({ onValid, onClose }) => {
   const [imageData, setImageData] = useState({
-    backgroundImg: '',
-    sliderImg: '',
-    uuid: '',
+    backgroundImg: "",
+    sliderImg: "",
+    uuid: ""
   });
   const uuid = imageData.uuid;
   const [isStartMove, setStartMove] = useState(false);
@@ -18,20 +20,17 @@ const Slider = ({ onValid }) => {
     let ignore = false;
     async function getImg() {
       const {
-        data: { data },
+        data: { data }
       } = await getSliderImg();
       if (!ignore) {
         setImageData({
           backgroundImg: data.captcha.backgroundImage,
           sliderImg: data.captcha.sliderImage,
-          uuid: data.id,
+          uuid: data.id
         });
       }
     }
-    if (reload) {
-      getImg();
-    }
-
+    getImg();
     return () => {
       ignore = true;
     };
@@ -48,30 +47,29 @@ const Slider = ({ onValid }) => {
 
     // 鼠标停止移动
     const onStop = () => {
-      window.removeEventListener('mousemove', onMove);
-      window.removeEventListener('mouseup', onStop);
+      window.removeEventListener("mousemove", onMove);
+      window.removeEventListener("mouseup", onStop);
       if (!isStartMove) return;
       setStartMove(false);
       validImg();
     };
     // 校验滑块
     async function validImg() {
-      setReload(false);
       const result = await onValid(movePercent, uuid);
-      setReload(!result);
       if (!result) {
+        setReload(!reload);
         setStartMove(false);
         setMoveX(0);
         setMovePercent(0);
       }
     }
     if (isStartMove) {
-      window.addEventListener('mousemove', onMove);
-      window.addEventListener('mouseup', onStop);
+      window.addEventListener("mousemove", onMove);
+      window.addEventListener("mouseup", onStop);
     }
     return () => {
-      window.removeEventListener('mousemove', onMove);
-      window.removeEventListener('mouseup', onStop);
+      window.removeEventListener("mousemove", onMove);
+      window.removeEventListener("mouseup", onStop);
     };
   }, [isStartMove, moveX, movePercent, startX, uuid, onValid]);
 
@@ -80,6 +78,12 @@ const Slider = ({ onValid }) => {
     setStartMove(true);
     setStartX(e.pageX);
   };
+
+  // 刷新滑块数据
+  const onReset = () => {
+    setReload(!reload);
+  };
+
   return (
     <div className="slider">
       <div className="mask">
@@ -98,6 +102,14 @@ const Slider = ({ onValid }) => {
                 <span className="yidun_slider_icon"></span>
               </div>
             </div>
+          </div>
+          <div className="button-group">
+            <img
+              style={{ height: "22px", width: "21px", marginRight: "8px" }}
+              src={refreshIcon}
+              onClick={onReset}
+            />
+            <img src={closeIcon} onClick={onClose} />
           </div>
         </div>
       </div>

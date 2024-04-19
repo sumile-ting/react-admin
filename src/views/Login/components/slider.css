@@ -128,4 +128,14 @@
       color: #fff;
     }
   }
+  .button-group {
+    position: relative;
+    top: 12px;
+    text-align: right;
+    img {
+      width: 25px;
+      height: 25px;
+      cursor: pointer;
+    }
+  }
 }

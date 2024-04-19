@@ -41,7 +41,8 @@ export default function Notice() {
       title: "#",
       dataIndex: "index",
       key: "title",
-      render: (text, record, index) => index + 1
+      render: (text, record, index) => index + 1,
+      width: 50
     },
     {
       title: "通知标题",
@@ -56,16 +57,20 @@ export default function Notice() {
     {
       title: "通知时间",
       dataIndex: "releaseTimeRange",
-      key: "releaseTimeRange"
+      key: "releaseTimeRange",
+      ellipsis: true
     },
     {
       title: "通知日期",
       dataIndex: "releaseTime",
-      key: "releaseTime"
+      key: "releaseTime",
+      ellipsis: true
     },
     {
       title: "操作",
       key: "action",
+      fixed: "right",
+      width: 150,
       render: (_, record) => (
         <Space>
           <Tooltip title="查看">
@@ -116,6 +121,7 @@ export default function Notice() {
     function getData() {
       const params = {
         title: queryParams.title,
+        category: queryParams.category,
         releaseTime_datege: queryParams.releaseTimeRange[0],
         releaseTime_datelt: queryParams.releaseTimeRange[1],
         current: queryParams.current,
@@ -166,20 +172,25 @@ export default function Notice() {
     const tHeader = element.querySelector(".ant-table-thead");
     const { bottom } = tHeader.getBoundingClientRect();
     // 88 =  32+16的分页高度 16+24底部间距
-    const height = `calc(100vh - ${bottom + 88}px)`;
+    let extraHeight = 40;
+    if (tableData.length) {
+      extraHeight = 88;
+    }
+    const height = `calc(100vh - ${bottom + extraHeight}px)`;
     setScrollHeight(height);
-    let placeholder = element.querySelector("ant-table-placeholder");
+    let placeholder = element.querySelector(".ant-table-placeholder");
     if (placeholder) {
       placeholder.style.height = height;
-      placeholder.style.display = "flex";
-      placeholder.style.alignItems = "center";
-      placeholder.style.justifyContent = "center";
     }
-  }, []);
+  }, [tableData]);
 
   return (
     <div className={classNames(styles.noticeContainer, "page-layout")}>
-      <Card bordered={false} styles={{ body: { paddingBottom: 0 } }}>
+      <Card
+        bordered={false}
+        styles={{ body: { paddingBottom: 0 } }}
+        style={{ margin: "15px 15px 0 7px" }}
+      >
         <Form
           name="horizontal_login"
           form={form}
@@ -228,7 +239,7 @@ export default function Notice() {
       <Card
         bordered={false}
         style={{
-          marginTop: "15px",
+          margin: "15px 15px 15px 7px",
           flex: "1",
           overflow: "hidden"
         }}
@@ -248,6 +259,7 @@ export default function Notice() {
           rootClassName="fill-height-table"
           ref={tableWrapperRef}
           scroll={{
+            x: "100%",
             y: scrollTableHeight
           }}
           rowSelection={{

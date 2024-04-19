@@ -26,4 +26,7 @@
   .ant-pagination.ant-table-pagination {
     margin-bottom: 0;
   }
+  .ant-table-placeholder .ant-table-expanded-row-fixed::after {
+    border: none !important;
+  }
 }
