@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef, useLayoutEffect } from "react";
 import {
   message,
+  Modal,
   Card,
   Form,
   Input,
@@ -15,11 +16,13 @@ import {
   theme
 } from "antd";
 import { EyeOutlined, EditOutlined, DeleteOutlined, PlusOutlined } from "@ant-design/icons";
+import Add from "./Add";
 import classNames from "classnames";
-import { getList } from "@/api/notice";
+import { getList, add, getNotice, remove } from "@/api/notice";
 import { getDict } from "@/api/system";
 import styles from "./index.module.scss";
 import "./index.scss";
+import dayjs from "dayjs";
 const { RangePicker } = DatePicker;
 const { useToken } = theme;
 export default function Notice() {
@@ -79,6 +82,7 @@ export default function Notice() {
               icon={<EyeOutlined />}
               size="small"
               style={{ color: token.colorLink }}
+              onClick={() => viewRow(record)}
             ></Button>
           </Tooltip>
           <Tooltip title="编辑">
@@ -87,6 +91,7 @@ export default function Notice() {
               icon={<EditOutlined />}
               size="small"
               style={{ color: token.colorLink }}
+              onClick={() => editRow(record)}
             ></Button>
           </Tooltip>
           <Tooltip title="删除">
@@ -184,6 +189,78 @@ export default function Notice() {
     }
   }, [tableData]);
 
+  const [isAddModalOpen, setAddModalOpen] = useState(false);
+
+  const [rowId, setRowId] = useState("");
+
+  const [disabled, setDisabled] = useState(false);
+
+  const footer = disabled ? null : (
+    <>
+      <Button onClick={() => setAddModalOpen(false)}>取消</Button>
+      <Button type="primary" onClick={handleAdd}>
+        确定
+      </Button>
+    </>
+  );
+
+  const addFormRef = useRef();
+
+  // 打开新增弹框
+  const handleAddClick = () => {
+    addFormRef.current.resetFields();
+    setAddModalOpen(true);
+    setRowId("");
+    setDisabled(false);
+  };
+
+  // 增加数据
+  async function handleAdd() {
+    try {
+      const values = await addFormRef.current.validateFields();
+      console.log("value-->", values);
+      add({
+        ...values,
+        id: rowId,
+        releaseTime: values.releaseTime.format("YYYY-MM-DD HH:mm:ss")
+      }).then(
+        () => {
+          message.success("添加成功!");
+          setAddModalOpen(false);
+          setQueryParams({ ...queryParams });
+          setRowId("");
+        },
+        () => {
+          setRowId("");
+        }
+      );
+    } catch (errorInfo) {
+      console.log("error-->", errorInfo);
+    }
+  }
+
+  // 编辑
+  async function editRow(row) {
+    setRowId(row.id);
+    await loadNoticeData(row);
+    setAddModalOpen(true);
+    setDisabled(false);
+  }
+
+  async function loadNoticeData(row) {
+    const { data } = await getNotice(row.id);
+    addFormRef.current.setFieldsValue({
+      ...data.data,
+      releaseTime: dayjs(row.releaseTime, "YYYY-MM-DD HH:mm:ss")
+    });
+  }
+
+  async function viewRow(row) {
+    await loadNoticeData(row);
+    setAddModalOpen(true);
+    setDisabled(true);
+  }
+
   return (
     <div className={classNames(styles.noticeContainer, "page-layout")}>
       <Card
@@ -247,7 +324,7 @@ export default function Notice() {
       >
         <div className={styles.tableHeaderOperator}>
           <Space>
-            <Button type="primary" icon={<PlusOutlined />}>
+            <Button type="primary" icon={<PlusOutlined />} onClick={handleAddClick}>
               新增
             </Button>
             <Button type="primary" danger icon={<DeleteOutlined />}>
@@ -286,6 +363,18 @@ export default function Notice() {
           dataSource={tableData}
         />
       </Card>
+      <Modal
+        title="新增"
+        width={860}
+        forceRender
+        destroyOnClose
+        open={isAddModalOpen}
+        onCancel={() => setAddModalOpen(false)}
+        onOk={handleAdd}
+        footer={footer}
+      >
+        <Add categoryOptions={categoryOptions} ref={addFormRef} disabled={disabled}></Add>
+      </Modal>
     </div>
   );
 }
