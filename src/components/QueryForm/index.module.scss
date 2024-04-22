@@ -1,0 +1,24 @@
+.form-collapse-btn {
+  position: absolute;
+  background: #fff;
+  bottom: -9px;
+  left: 50%;
+  transform: translateX(50%);
+  width: 60px;
+  height: 11px;
+  font-size: 11px;
+  border-radius: 0 0 8px 8px;
+  text-align: center;
+  line-height: 11px;
+  cursor: pointer;
+}
+.query-form {
+  transition: max-height .2s linear;
+  max-height: 56px;
+  height: 56px;
+}
+
+.query-form-expand {
+  max-height: 300px; 
+  height: auto;
+}

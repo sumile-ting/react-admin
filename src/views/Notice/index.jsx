@@ -289,6 +289,7 @@ export default function Notice() {
         remove(ids.join(",")).then(() => {
           message.info("删除成功！");
           setQueryParams({ ...queryParams });
+          setSelectedRowKeys([]);
         });
       }
     });
@@ -302,7 +303,6 @@ export default function Notice() {
         style={{ margin: "15px 15px 0 7px" }}
       >
         <Form
-          name="horizontal_login"
           form={form}
           style={formStyle}
           colon={false}

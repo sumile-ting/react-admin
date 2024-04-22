@@ -1,8 +1,9 @@
 import styles from "./index.module.scss";
-import { MailOutlined } from "@ant-design/icons";
+import { MailOutlined, LockOutlined } from "@ant-design/icons";
 import { Menu } from "antd";
 import { useEffect, useState } from "react";
 import { useNavigate, useMatches } from "react-router-dom";
+import classNames from "classnames";
 export default function Aside() {
   const navigate = useNavigate();
   let matches = useMatches();
@@ -14,7 +15,6 @@ export default function Aside() {
     setSelectedKeys(matches.map((item) => item.pathname));
   }, [matches]);
 
-
   const items = [
     {
       label: "工作台",
@@ -24,6 +24,17 @@ export default function Aside() {
         {
           label: "通知公告",
           key: "/desk/notice"
+        }
+      ]
+    },
+    {
+      label: "权限管理",
+      key: "/authority",
+      icon: <LockOutlined />,
+      children: [
+        {
+          label: "角色管理",
+          key: "/authority/role"
         }
       ]
     }
@@ -38,7 +49,7 @@ export default function Aside() {
   };
 
   return (
-    <div className={styles.aside}>
+    <div className={classNames(styles.aside, "left-aside")}>
       <Menu
         mode="inline"
         style={{ width: 240, borderInlineEnd: "none" }}
