@@ -50,24 +50,28 @@ export default function Notice() {
     {
       title: "通知标题",
       dataIndex: "title",
-      key: "title"
+      key: "title",
+      width: 200
     },
     {
       title: "通知类型",
       dataIndex: "categoryName",
-      key: "categoryName"
+      key: "categoryName",
+      width: 150
     },
     {
       title: "通知时间",
       dataIndex: "releaseTimeRange",
       key: "releaseTimeRange",
-      ellipsis: true
+      ellipsis: true,
+      width: 150
     },
     {
       title: "通知日期",
       dataIndex: "releaseTime",
       key: "releaseTime",
-      ellipsis: true
+      ellipsis: true,
+      width: 150
     },
     {
       title: "操作",
@@ -95,7 +99,14 @@ export default function Notice() {
             ></Button>
           </Tooltip>
           <Tooltip title="删除">
-            <Button type="text" danger icon={<DeleteOutlined />} size="small"></Button>
+            <Button
+              type="text"
+              danger
+              icon={<DeleteOutlined />}
+              size="small"
+              disabled={!selectedRowKeys.length}
+              onClick={() => removeSelection([record.id])}
+            ></Button>
           </Tooltip>
         </Space>
       )
@@ -106,6 +117,8 @@ export default function Notice() {
   const [categoryOptions, setCategoryOptions] = useState([]);
   const [scrollTableHeight, setScrollHeight] = useState("100%");
   const tableWrapperRef = useRef(null);
+
+  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
 
   useEffect(() => {
     async function getData() {
@@ -169,6 +182,7 @@ export default function Notice() {
   const rowSelection = {
     onChange: (selectedRowKeys, selectedRows) => {
       console.log(`selectedRowKeys: ${selectedRowKeys}`, "selectedRows: ", selectedRows);
+      setSelectedRowKeys(selectedRowKeys);
     }
   };
 
@@ -255,10 +269,29 @@ export default function Notice() {
     });
   }
 
+  // 查看
   async function viewRow(row) {
     await loadNoticeData(row);
     setAddModalOpen(true);
     setDisabled(true);
+  }
+
+  function handleDelete() {
+    removeSelection(selectedRowKeys);
+  }
+
+  function removeSelection(ids) {
+    const { confirm } = Modal;
+    confirm({
+      title: "删除提示?",
+      content: "确定要删除选中的数据吗",
+      onOk() {
+        remove(ids.join(",")).then(() => {
+          message.info("删除成功！");
+          setQueryParams({ ...queryParams });
+        });
+      }
+    });
   }
 
   return (
@@ -327,7 +360,7 @@ export default function Notice() {
             <Button type="primary" icon={<PlusOutlined />} onClick={handleAddClick}>
               新增
             </Button>
-            <Button type="primary" danger icon={<DeleteOutlined />}>
+            <Button type="primary" danger icon={<DeleteOutlined />} onClick={handleDelete}>
               删除
             </Button>
           </Space>
@@ -336,7 +369,7 @@ export default function Notice() {
           rootClassName="fill-height-table"
           ref={tableWrapperRef}
           scroll={{
-            x: "100%",
+            x: "500px",
             y: scrollTableHeight
           }}
           rowSelection={{
