@@ -2,7 +2,16 @@ import { Card } from "antd";
 import QueryForm from "../QueryForm";
 import styles from "./index.module.scss";
 function TablePageLayout(props) {
-  const { columns, search, queryRender, toolbarRender, tableRender, onQuery, onResetQuery } = props;
+  const {
+    columns, // 列配置
+    formProps, // 搜索面板form属性自定义
+    search, // 是否显示上方搜索功能面板
+    queryRender, // 搜索功能面板内容自定义
+    toolbarRender, // 自定义表格上方操作栏
+    tableRender, // 表格渲染
+    onQuery, // 搜索
+    onResetQuery // 重置搜索
+  } = props;
   return (
     <div className="page-layout">
       {search &&
@@ -14,7 +23,12 @@ function TablePageLayout(props) {
             styles={{ body: { paddingBottom: 0 } }}
             style={{ margin: "15px 15px 0 7px" }}
           >
-            <QueryForm columns={columns} onFinish={onQuery} onReset={onResetQuery}></QueryForm>
+            <QueryForm
+              formProps={formProps}
+              columns={columns}
+              onFinish={onQuery}
+              onReset={onResetQuery}
+            ></QueryForm>
           </Card>
         ))}
       <Card

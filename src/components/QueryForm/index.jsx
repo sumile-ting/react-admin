@@ -3,7 +3,7 @@ import { DownOutlined, UpOutlined } from "@ant-design/icons";
 import { useEffect, useMemo, useState } from "react";
 import classNames from "classnames";
 import styles from "./index.module.scss";
-function QueryForm({ columns, onFinish, onReset }) {
+function QueryForm({ columns, onFinish, onReset, formProps }) {
   const [form] = Form.useForm();
 
   const [collapse, setCollapse] = useState(true);
@@ -19,20 +19,25 @@ function QueryForm({ columns, onFinish, onReset }) {
     }
   };
 
-  const searchBtnLg = searchColumnLength >= 4 && collapse ? 6 : (4 - (searchColumnLength % 4)) * 6;
-  const searchBtnMd =
-    searchColumnLength >= 2 && collapse ? 12 : (2 - (searchColumnLength % 2)) * 12;
-
   const [minVisibleLength, setMinVisibleLength] = useState(3);
-  useEffect(() => {
-    function onResize() {
-      const clientWidth = document.documentElement.clientWidth;
-      if (clientWidth >= 1200) {
-        setMinVisibleLength(3);
-      } else {
-        setMinVisibleLength(1);
-      }
+  function onResize() {
+    const clientWidth = document.documentElement.clientWidth;
+    if (clientWidth >= 1600) {
+      setMinVisibleLength(3);
+    } else if (clientWidth >= 1200) {
+      setMinVisibleLength(2);
+    } else {
+      setMinVisibleLength(1);
     }
+  }
+  const colLen = minVisibleLength + 1; // 每行可容纳的form-item数量
+  const colSpan = 24 / colLen; // 每个form-item占的span
+  const searchBtnSpan =
+    searchColumnLength >= colLen && collapse
+      ? colSpan
+      : (colLen - (searchColumnLength % colLen)) * colSpan;
+
+  useEffect(() => {
     onResize();
     window.addEventListener("resize", onResize);
     return () => {
@@ -43,6 +48,8 @@ function QueryForm({ columns, onFinish, onReset }) {
   return (
     <Form
       className={classNames(styles.queryForm, !collapse && styles.queryFormExpand)}
+      layout="horizontal"
+      {...formProps}
       form={form}
       colon={false}
       onFinish={onFinish}
@@ -51,15 +58,22 @@ function QueryForm({ columns, onFinish, onReset }) {
         {queryColumns.map(
           (item, index) =>
             (!collapse || index < minVisibleLength) && (
-              <Col xs={24} sm={24} md={12} lg={12} xl={6} xxl={6} key={item.name}>
+              <Col xs={24} sm={24} md={12} lg={12} xl={8} xxl={6} key={item.name}>
                 <Form.Item name={item.name} label={item.label}>
                   {formItemRender(item)}
                 </Form.Item>
               </Col>
             )
         )}
-        <Col xs={24} sm={24} xl={searchBtnLg} xxl={searchBtnLg} md={searchBtnMd} lg={searchBtnMd}>
-          <Form.Item>
+        <Col
+          xs={24}
+          sm={24}
+          xl={searchBtnSpan}
+          xxl={searchBtnSpan}
+          md={searchBtnSpan}
+          lg={searchBtnSpan}
+        >
+          <Form.Item wrapperCol={{ span: 24 }}>
             <div
               style={{
                 textAlign: "right"

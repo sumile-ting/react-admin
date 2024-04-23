@@ -69,5 +69,12 @@ export default function Role() {
   function onQuery(values) {
     console.log("查询条件：：", values);
   }
-  return <TablePageLayout search={true} columns={columns} onQuery={onQuery}></TablePageLayout>;
+  return (
+    <TablePageLayout
+      search={true}
+      formProps={{ labelCol: { span: 5 }, wrapperCol: { span: 19 } }}
+      columns={columns}
+      onQuery={onQuery}
+    ></TablePageLayout>
+  );
 }

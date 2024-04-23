@@ -3,7 +3,7 @@
   background: #fff;
   bottom: -9px;
   left: 50%;
-  transform: translateX(50%);
+  transform: translateX(-50%);
   width: 60px;
   height: 11px;
   font-size: 11px;
@@ -15,10 +15,15 @@
 .query-form {
   transition: max-height .2s linear;
   max-height: 56px;
-  height: 56px;
+}
+
+@media screen and (max-width: 768px) {
+  .query-form {
+    max-height: 156px;
+  }
 }
 
 .query-form-expand {
-  max-height: 300px; 
+  max-height: 800px; 
   height: auto;
 }
