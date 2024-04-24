@@ -1,5 +1,8 @@
 import { Card } from "antd";
+import { useState } from "react";
+import classNames from "classnames";
 import QueryForm from "../QueryForm";
+import CustomTable from "../CustomTable";
 import styles from "./index.module.scss";
 function TablePageLayout(props) {
   const {
@@ -8,10 +11,12 @@ function TablePageLayout(props) {
     search, // 是否显示上方搜索功能面板
     queryRender, // 搜索功能面板内容自定义
     toolbarRender, // 自定义表格上方操作栏
-    tableRender, // 表格渲染
+    tableProps, // 表格Table属性自定义
+    tableRender, // 自定义表格渲染区域
     onQuery, // 搜索
     onResetQuery // 重置搜索
   } = props;
+  const [collapse, setCollapse] = useState(true);
   return (
     <div className="page-layout">
       {search &&
@@ -24,6 +29,8 @@ function TablePageLayout(props) {
             style={{ margin: "15px 15px 0 7px" }}
           >
             <QueryForm
+              setCollapse={setCollapse}
+              collapse={collapse}
               formProps={formProps}
               columns={columns}
               onFinish={onQuery}
@@ -41,7 +48,11 @@ function TablePageLayout(props) {
         styles={{ body: { display: "flex", flexDirection: "column", height: "100%" } }}
       >
         <div className={styles.tableHeaderOperator}>{toolbarRender}</div>
-        {tableRender}
+        {tableRender ? (
+          tableRender(collapse)
+        ) : (
+          <CustomTable collapse={collapse} columns={columns} {...tableProps} />
+        )}
       </Card>
     </div>
   );

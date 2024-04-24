@@ -1,9 +1,12 @@
 import TablePageLayout from "@/components/TablePageLayout";
-import { Select, TreeSelect } from "antd";
+import { Select, TreeSelect, Space, Button, Tooltip, theme } from "antd";
+import { EyeOutlined, EditOutlined, DeleteOutlined, PlusOutlined } from "@ant-design/icons";
 import { getOwnerApply, getTenant } from "@/api/authority/role";
 import { useEffect, useState } from "react";
 export default function Role() {
   const { Option } = Select;
+  const { useToken } = theme;
+  const { token } = useToken();
 
   const [ownerApps, setOwnerApps] = useState([]);
   const [tenants, setTenants] = useState([]);
@@ -17,11 +20,18 @@ export default function Role() {
       const { data } = await getTenant();
       setTenants(data.data);
     }
+    // 初始化字典
     initData();
     initTenants();
   }, []);
 
   const columns = [
+    {
+      label: "#",
+      name: "title",
+      render: (text, record, index) => index + 1,
+      width: 50
+    },
     {
       name: "roleName",
       label: "角色名称",
@@ -63,18 +73,72 @@ export default function Role() {
           ))}
         </Select>
       )
+    },
+    {
+      label: "操作",
+      keyIndex: "action",
+      fixed: "right",
+      width: 150,
+      render: (_, record) => (
+        <Space>
+          <Tooltip title="查看">
+            <Button
+              type="text"
+              icon={<EyeOutlined />}
+              size="small"
+              style={{ color: token.colorLink }}
+            ></Button>
+          </Tooltip>
+          <Tooltip title="编辑">
+            <Button
+              type="text"
+              icon={<EditOutlined />}
+              size="small"
+              style={{ color: token.colorLink }}
+            ></Button>
+          </Tooltip>
+          <Tooltip title="删除">
+            <Button type="text" danger icon={<DeleteOutlined />} size="small"></Button>
+          </Tooltip>
+        </Space>
+      )
     }
   ];
+
+  const toolbarRender = (
+    <Space>
+      <Button type="primary" icon={<PlusOutlined />} onClick={handleAddClick}>
+        新增
+      </Button>
+      <Button type="primary" danger icon={<DeleteOutlined />} onClick={handleDelete}>
+        删除
+      </Button>
+    </Space>
+  );
+
+  const tableData = Array.from({ length: 11 }).map((item, index) => ({
+    id: index + 1,
+    roleName: "测试" + index
+  }));
 
   function onQuery(values) {
     console.log("查询条件：：", values);
   }
+
+  // 新增
+  function handleAddClick() {}
+
+  // 删除
+  function handleDelete() {}
+
   return (
     <TablePageLayout
       search={true}
       formProps={{ labelCol: { span: 5 }, wrapperCol: { span: 19 } }}
       columns={columns}
       onQuery={onQuery}
+      toolbarRender={toolbarRender}
+      tableProps={{ tableData: tableData, rowKey: "id" }}
     ></TablePageLayout>
   );
 }

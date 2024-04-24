@@ -12,18 +12,3 @@
   line-height: 11px;
   cursor: pointer;
 }
-.query-form {
-  transition: max-height .2s linear;
-  max-height: 56px;
-}
-
-@media screen and (max-width: 768px) {
-  .query-form {
-    max-height: 156px;
-  }
-}
-
-.query-form-expand {
-  max-height: 800px; 
-  height: auto;
-}

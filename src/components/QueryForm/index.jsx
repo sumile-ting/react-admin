@@ -1,12 +1,10 @@
 import { Form, Row, Col, Input, Space, Button, Tooltip } from "antd";
 import { DownOutlined, UpOutlined } from "@ant-design/icons";
 import { useEffect, useMemo, useState } from "react";
-import classNames from "classnames";
-import styles from "./index.module.scss";
-function QueryForm({ columns, onFinish, onReset, formProps }) {
-  const [form] = Form.useForm();
 
-  const [collapse, setCollapse] = useState(true);
+import styles from "./index.module.scss";
+function QueryForm({ collapse, setCollapse, columns, onFinish, onReset, formProps }) {
+  const [form] = Form.useForm();
 
   const queryColumns = useMemo(() => columns.filter((item) => item.search), [columns]);
   const searchColumnLength = queryColumns.length;
@@ -47,7 +45,6 @@ function QueryForm({ columns, onFinish, onReset, formProps }) {
 
   return (
     <Form
-      className={classNames(styles.queryForm, !collapse && styles.queryFormExpand)}
       layout="horizontal"
       {...formProps}
       form={form}

@@ -21,7 +21,6 @@ function CustomTable(props) {
     const element = tableWrapperRef.current.nativeElement;
     const tHeader = element.querySelector(".ant-table-thead");
     const { bottom } = tHeader.getBoundingClientRect();
-    console.log("####", bottom);
     // 88 =  32+16的分页高度 16+24底部间距
     let extraHeight = 40;
     if (pagination && tableData.length) {
