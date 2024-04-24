@@ -1,8 +1,9 @@
 import TablePageLayout from "@/components/TablePageLayout";
 import { Select, TreeSelect, Space, Button, Tooltip, theme } from "antd";
 import { EyeOutlined, EditOutlined, DeleteOutlined, PlusOutlined } from "@ant-design/icons";
-import { getOwnerApply, getTenant } from "@/api/authority/role";
+import { getOwnerApply, getTenant, getRoleList } from "@/api/authority/role";
 import { useEffect, useState } from "react";
+import request from "@/api";
 export default function Role() {
   const { Option } = Select;
   const { useToken } = theme;
@@ -26,12 +27,6 @@ export default function Role() {
   }, []);
 
   const columns = [
-    {
-      label: "#",
-      name: "title",
-      render: (text, record, index) => index + 1,
-      width: 50
-    },
     {
       name: "roleName",
       label: "角色名称",
@@ -72,7 +67,8 @@ export default function Role() {
             </Option>
           ))}
         </Select>
-      )
+      ),
+      render: (_, record) => record.applyCount
     },
     {
       label: "操作",
@@ -116,15 +112,6 @@ export default function Role() {
     </Space>
   );
 
-  const tableData = Array.from({ length: 11 }).map((item, index) => ({
-    id: index + 1,
-    roleName: "测试" + index
-  }));
-
-  function onQuery(values) {
-    console.log("查询条件：：", values);
-  }
-
   // 新增
   function handleAddClick() {}
 
@@ -136,9 +123,14 @@ export default function Role() {
       search={true}
       formProps={{ labelCol: { span: 5 }, wrapperCol: { span: 19 } }}
       columns={columns}
-      onQuery={onQuery}
       toolbarRender={toolbarRender}
-      tableProps={{ tableData: tableData, rowKey: "id" }}
+      tableProps={{
+        showIndex: true,
+        requestApi: getRoleList,
+        rowKey: "id",
+        showPagination: true,
+        pageSize: 20
+      }}
     ></TablePageLayout>
   );
 }

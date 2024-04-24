@@ -13,3 +13,14 @@ export const getTenant = () =>
     url: "/spang-system/tenant/selectAll",
     method: "get"
   });
+
+// 获取角色管理列表数据
+export const getRoleList = (params) => {
+  return request({
+    url: "/spang-system/role/list-apply",
+    method: "get",
+    params: {
+      ...params,
+    }
+  });
+};

@@ -3,7 +3,7 @@ import { DownOutlined, UpOutlined } from "@ant-design/icons";
 import { useEffect, useMemo, useState } from "react";
 
 import styles from "./index.module.scss";
-function QueryForm({ collapse, setCollapse, columns, onFinish, onReset, formProps }) {
+function QueryForm({ collapse, setCollapse, columns, onQuery, formProps }) {
   const [form] = Form.useForm();
 
   const queryColumns = useMemo(() => columns.filter((item) => item.search), [columns]);
@@ -44,13 +44,7 @@ function QueryForm({ collapse, setCollapse, columns, onFinish, onReset, formProp
   }, []);
 
   return (
-    <Form
-      layout="horizontal"
-      {...formProps}
-      form={form}
-      colon={false}
-      onFinish={onFinish}
-    >
+    <Form layout="horizontal" {...formProps} form={form} colon={false} onFinish={onQuery}>
       <Row gutter={24}>
         {queryColumns.map(
           (item, index) =>
@@ -80,7 +74,14 @@ function QueryForm({ collapse, setCollapse, columns, onFinish, onReset, formProp
                 <Button type="primary" htmlType="submit">
                   查询
                 </Button>
-                <Button onClick={onReset}>重置</Button>
+                <Button
+                  onClick={() => {
+                    form.resetFields();
+                    onQuery({});
+                  }}
+                >
+                  重置
+                </Button>
               </Space>
             </div>
           </Form.Item>
