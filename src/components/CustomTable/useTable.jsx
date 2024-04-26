@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 export function useTable(props) {
-  const { request, pageInfo } = props;
+  const { request } = props;
   const [tableData, setTableData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [total, setTotal] = useState(0);
@@ -13,7 +13,7 @@ export function useTable(props) {
       try {
         const {
           data: { data }
-        } = await request({ ...pageInfo });
+        } = await request();
         if (!ignore) {
           setTableData(data.records);
           setTotal(data.total);
@@ -27,7 +27,7 @@ export function useTable(props) {
     return () => {
       ignore = true;
     };
-  }, [request, pageInfo]);
+  }, [request]);
   return {
     tableData,
     setTableData,

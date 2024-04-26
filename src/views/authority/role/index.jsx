@@ -3,7 +3,6 @@ import { Select, TreeSelect, Space, Button, Tooltip, theme } from "antd";
 import { EyeOutlined, EditOutlined, DeleteOutlined, PlusOutlined } from "@ant-design/icons";
 import { getOwnerApply, getTenant, getRoleList } from "@/api/authority/role";
 import { useEffect, useState } from "react";
-import request from "@/api";
 export default function Role() {
   const { Option } = Select;
   const { useToken } = theme;
@@ -11,6 +10,7 @@ export default function Role() {
 
   const [ownerApps, setOwnerApps] = useState([]);
   const [tenants, setTenants] = useState([]);
+  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
 
   useEffect(() => {
     async function initData() {
@@ -106,11 +106,23 @@ export default function Role() {
       <Button type="primary" icon={<PlusOutlined />} onClick={handleAddClick}>
         新增
       </Button>
-      <Button type="primary" danger icon={<DeleteOutlined />} onClick={handleDelete}>
+      <Button
+        type="primary"
+        danger
+        icon={<DeleteOutlined />}
+        disabled={!selectedRowKeys.length}
+        onClick={handleDelete}
+      >
         删除
       </Button>
     </Space>
   );
+
+  const rowSelection = {
+    onChange: (selectedRowKeys) => {
+      setSelectedRowKeys(selectedRowKeys);
+    }
+  };
 
   // 新增
   function handleAddClick() {}
@@ -129,7 +141,11 @@ export default function Role() {
         requestApi: getRoleList,
         rowKey: "id",
         showPagination: true,
-        pageSize: 20
+        pageSize: 20,
+        rowSelection: {
+          type: "checkbox",
+          ...rowSelection
+        }
       }}
     ></TablePageLayout>
   );

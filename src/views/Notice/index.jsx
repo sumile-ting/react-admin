@@ -104,7 +104,6 @@ export default function Notice() {
               danger
               icon={<DeleteOutlined />}
               size="small"
-              disabled={!selectedRowKeys.length}
               onClick={() => removeSelection([record.id])}
             ></Button>
           </Tooltip>
@@ -302,12 +301,7 @@ export default function Notice() {
         styles={{ body: { paddingBottom: 0 } }}
         style={{ margin: "15px 15px 0 7px" }}
       >
-        <Form
-          form={form}
-          style={formStyle}
-          colon={false}
-          onFinish={onFinish}
-        >
+        <Form form={form} style={formStyle} colon={false} onFinish={onFinish}>
           <Row gutter={24}>
             <Col span={6}>
               <Form.Item name="title" label="通知标题">
@@ -360,7 +354,13 @@ export default function Notice() {
             <Button type="primary" icon={<PlusOutlined />} onClick={handleAddClick}>
               新增
             </Button>
-            <Button type="primary" danger icon={<DeleteOutlined />} onClick={handleDelete}>
+            <Button
+              type="primary"
+              danger
+              icon={<DeleteOutlined />}
+              disabled={!selectedRowKeys.length}
+              onClick={handleDelete}
+            >
               删除
             </Button>
           </Space>

@@ -11,21 +11,10 @@ function CustomTable(props) {
     columns, // 表格列配置
     showPagination, //是否显示分页
     pagination, // 分页配置
-    requestApi // 获取表格数据的请求
+    requestApi, // 获取表格数据的请求
+    rowSelection, // 选择事件
+    extraProps // 其他Antd Table的属性
   } = props;
-
-  const fetchData = useMemo(() => {
-    if (!requestApi) {
-      return;
-    }
-    return async (pageParams) => {
-      const actionParams = {
-        ...(pageParams || {}),
-        ...queryParams
-      };
-      return requestApi(actionParams);
-    };
-  }, [requestApi, queryParams]);
 
   const [pageData, setPageData] = useState(
     pagination
@@ -38,6 +27,19 @@ function CustomTable(props) {
       current: pageData.current || 1
     };
   }, [pageData]);
+
+  const fetchData = useMemo(() => {
+    if (!requestApi) {
+      return;
+    }
+    return async () => {
+      const actionParams = {
+        ...(pageInfo || {}),
+        ...queryParams
+      };
+      return requestApi(actionParams);
+    };
+  }, [requestApi, queryParams, pageInfo]);
 
   const { tableData, loading, total } = useTable({
     request: fetchData,
@@ -108,10 +110,12 @@ function CustomTable(props) {
             }
           : false
       }
-      rowKey={"id"}
+      rowKey={props.rowKey || "id"}
       bordered={true}
       columns={tableColumns}
       dataSource={tableData}
+      rowSelection={rowSelection}
+      {...extraProps}
     />
   );
 }
