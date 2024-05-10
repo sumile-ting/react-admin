@@ -157,6 +157,7 @@ export default function Notice() {
     const rangeTimeValue = values["releaseTimeRange"];
     setQueryParams({
       ...queryParams,
+      current: 1,
       ...values,
       releaseTimeRange: rangeTimeValue
         ? [

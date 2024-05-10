@@ -4,14 +4,14 @@ import JSEncrype from 'jsencrypt'
 
 export const loginByUsername = (tenantId, username, password, key, code, preSessionId, authKey, authIv) =>
   request({
-    url: '/spang-auth/oauth/token',
-    method: 'post',
+    url: "/sumile-auth/oauth/token",
+    method: "post",
     headers: {
-      'Tenant-Id': tenantId,
+      "Tenant-Id": tenantId,
       // 'Dept-Id': website.switchMode ? deptId : '',
       // 'Role-Id': website.switchMode ? roleId : '',
-      'Captcha-Key': key,
-      'Captcha-Code': code
+      "Captcha-Key": key,
+      "Captcha-Code": code
     },
     params: {
       tenantId,
@@ -20,61 +20,61 @@ export const loginByUsername = (tenantId, username, password, key, code, preSess
       preSessionId,
       authKey,
       authIv,
-      grant_type: 'sliderCaptcha',
-      scope: 'all',
+      grant_type: "sliderCaptcha",
+      scope: "all"
       // type
     }
-  })
+  });
 
 export const refreshToken = (refresh_token, tenantId) =>
   request({
-    url: '/spang-auth/oauth/token',
-    method: 'post',
+    url: "/sumile-auth/oauth/token",
+    method: "post",
     headers: {
-      'Tenant-Id': tenantId
+      "Tenant-Id": tenantId
     },
     params: {
       tenantId,
       refresh_token,
-      grant_type: 'refresh_token',
-      scope: 'all'
+      grant_type: "refresh_token",
+      scope: "all"
     }
-  })
+  });
 
 
 export const getButtons = () =>
   request({
-    url: '/spang-system/menu/buttons',
-    method: 'get'
-  })
+    url: "/sumile-system/menu/buttons",
+    method: "get"
+  });
 
 
 export const logout = () =>
   request({
-    url: '/spang-auth/oauth/logout',
-    method: 'get'
-  })
+    url: "/sumile-auth/oauth/logout",
+    method: "get"
+  });
 
 export const getUserInfo = () =>
   request({
-    url: '/spang-system/info',
-    method: 'get',
+    url: "/sumile-system/info",
+    method: "get"
   });
 
 
 
 export const preLogin = () =>
   request({
-    url: '/spang-auth/oauth/preLogin',
-    method: 'get'
-  })
+    url: "/sumile-auth/oauth/preLogin",
+    method: "get"
+  });
 
 
 export const getSliderImg = () => {
   return request({
-    url: '/spang-auth/captcha/code',
-    method: 'get'
-  })
+    url: "/sumile-auth/captcha/code",
+    method: "get"
+  });
 }
 
 function randomGenerate (length) {
@@ -99,15 +99,18 @@ export  function loginBySlider(userInfo) {
       const pubKey = new JSEncrype()
       pubKey.setPrivateKey(res.data.publickey)
       // 这里拆分出
-      let pwd = CryptoJS.AES.encrypt(
-        password, // 加密原文
-        key, // AES密钥
-        {
-          iv,
-          mode: CryptoJS.mode.CBC, // 指定CBC模式
-          padding: CryptoJS.pad.NoPadding
-        }
-      ).toString()
+      let pwd =
+        import.meta.env.VITE_USE_MOCK === "true"
+          ? userInfo.password
+          : CryptoJS.AES.encrypt(
+              password, // 加密原文
+              key, // AES密钥
+              {
+                iv,
+                mode: CryptoJS.mode.CBC, // 指定CBC模式
+                padding: CryptoJS.pad.NoPadding
+              }
+            ).toString();
       return loginByUsername(userInfo.tenantId, userInfo.username, pwd, userInfo.key, userInfo.code, res.data.preSessionId, pubKey.encrypt(keyString), pubKey.encrypt(ivString))
     }).then(res => {
       const data = res.data;

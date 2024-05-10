@@ -42,9 +42,8 @@ const Login = () => {
               navigate("/desk/notice");
             });
           },
-          ({ status, data }) => {
+          ({ status }) => {
             resolve(status);
-            message.error(data);
           }
         )
         .finally(() => {
@@ -68,14 +67,14 @@ const Login = () => {
               name="username"
               rules={[{ required: true, message: "请输入用户名!" }]}
             >
-              <Input />
+              <Input placeholder="admin" />
             </Form.Item>
             <Form.Item
               label="密码"
               name="password"
               rules={[{ required: true, message: "请输入密码!" }]}
             >
-              <Input.Password />
+              <Input.Password placeholder="admin" />
             </Form.Item>
             <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
               <Button type="primary" htmlType="submit">

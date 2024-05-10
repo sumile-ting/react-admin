@@ -4,7 +4,7 @@ import router from "@/router";
 import { message } from "antd";
 
 const request = axios.create({
-  baseURL: "/api", // 设置统一的请求前缀
+  baseURL: import.meta.env.VITE_USE_MOCK === "true" ? "/mock" : "/api", // 设置统一的请求前缀
   timeout: 10000, // 设置统一的超时时长
   validateStatus: (status) => {
     return status >= 200 && status <= 500;
@@ -14,7 +14,7 @@ request.interceptors.request.use(
   (config) => {
     config.headers["Authorization"] = "Basic c2FiZXI6c2FiZXJfc2VjcmV0";
     if (getToken()) {
-      config.headers["Spang-Auth"] = getToken();
+      config.headers["Sumile-Auth"] = getToken();
     }
     return config;
   },
