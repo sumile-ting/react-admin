@@ -1,14 +1,14 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
 import { lazy, Suspense } from "react";
 import { Spin } from "antd";
-import Layout from "@/Layout";
+import Layout from "@/layout";
 import AuthRoute from "./AuthRoute";
 import NotFound from "@/views/NotFound";
 
 const Login = lazy(() => import("@/views/Login"));
 const Notice = lazy(() => import("@/views/Notice"));
 const Welcome = lazy(() => import("@/views/Welcome"));
-const Role = lazy(() => import("@/views/authority/role"));
+const Role = lazy(() => import("@/views/Authority/Role"));
 
 const router = createBrowserRouter([
   {

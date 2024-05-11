@@ -1,0 +1,11 @@
+.main-container {
+  position: relative;
+  top: var(--top-header-height);
+  display: flex;
+  height: calc(100% - var(--top-header-height));
+}
+.main-section {
+  flex-grow: 1;
+  width: 100%;
+  overflow: hidden;
+}
